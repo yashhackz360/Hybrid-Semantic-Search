@@ -9,6 +9,7 @@ A sophisticated, multi-layered search engine designed to understand natural lang
 ![License](https://img.shields.io/badge/License-MIT-purple?style=for-the-badge)
 
 ---
+![PROJECT UI Screenshot](app_ui.png)
 
 ## 📋 Table of Contents
 1. [Project Overview](#-project-overview)
