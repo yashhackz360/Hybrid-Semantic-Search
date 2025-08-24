@@ -1,67 +1,67 @@
-````markdown
 # Hybrid Semantic Search: A Product Discovery Engine for E-Commerce
 
+A sophisticated, multi-layered search engine designed to understand natural language queries and provide highly relevant results for technical products like laptops.
+
 ![Python](https://img.shields.io/badge/Python-3.10+-blue?style=for-the-badge&logo=python)
+![Streamlit](https://img.shields.io/badge/Streamlit-UI-red?style=for-the-badge&logo=streamlit)
+![FastAPI](https://img.shields.io/badge/FastAPI-API-green?style=for-the-badge&logo=fastapi)
 ![Pinecone](https://img.shields.io/badge/Pinecone-Vector_DB-orange?style=for-the-badge&logo=pinecone)
-![Hugging Face](https://img.shields.io/badge/🤗%20Hugging%20Face-Models-yellow?style=for-the-badge&logo=huggingface)
+![License](https://img.shields.io/badge/License-MIT-purple?style=for-the-badge)
 
 ---
 
 ## 📋 Table of Contents
-1. [Project Overview](#-project-overview)  
-2. [How It Works](#-how-it-works)  
-3. [Key Features](#-key-features)  
-4. [Tech Stack](#-tech-stack)  
-5. [Setup and Installation](#-setup-and-installation)  
-6. [Usage](#-usage)  
-7. [Project Structure](#-project-structure)  
-8. [Future Improvements](#-future-improvements)  
-9. [Connect with Me](#-connect-with-me)  
+1. [Project Overview](#-project-overview)
+2. [How It Works](#-how-it-works)
+3. [Key Features](#-key-features)
+4. [Tech Stack](#-tech-stack)
+5. [Setup and Installation](#-setup-and-installation)
+6. [Usage](#-usage)
+7. [Example Queries](#-example-queries)
+8. [Project Structure](#-project-structure)
+9. [Future Improvements](#-future-improvements)
+10. [Dataset](#-dataset)
+11. [License](#-license)
+12. [Connect with Me](#-connect-with-me)
 
 ---
 
 ## 🚀 Project Overview
 
-This project tackles the limitations of traditional keyword-based search. While standard search finds exact matches, it often fails to understand user intent, context, and nuance. This **Hybrid Semantic Search Engine** provides a more intelligent and intuitive product discovery experience.
+This project delivers a state-of-the-art search solution engineered to bridge the gap between conversational human language and structured product data. Traditional keyword-based systems often fail to capture user intent, leading to irrelevant results.  
 
-By combining the power of dense vector search (semantic understanding) with precise, attribute-based filtering (keyword matching), the system can interpret complex, conversational queries and return results that are not just similar, but **truly relevant**.
-
-This engine's capabilities are demonstrated using a **sample dataset of laptop specifications**, showcasing its effectiveness in a real-world technical e-commerce scenario.
+This **Hybrid Semantic Search Engine** fuses **dense vector retrieval** (for semantic understanding) with **attribute-based filtering** (for technical accuracy). Using a sample dataset of laptop specifications, it demonstrates how search can evolve from a basic lookup tool into a powerful product discovery engine.
 
 ---
 
 ## 🔎 How It Works
 
-The engine follows a multi-stage pipeline to process a user's query and retrieve the most relevant results:
-
-1. **Query Processing** – Expand the raw query with relevant synonyms using WordNet; parse out structured specs (RAM, brand, CPU, storage, GPU, price caps, screen size, etc.).  
-2. **Semantic Retrieval** – Encode the processed query with a sentence-transformer; query Pinecone to fetch the top-`k` semantically similar items.  
-3. **Hard Filtering** – Apply exact spec filters extracted in step 1 (e.g., *ram_gb >= 16* or *brand in {dell, acer}*).  
-4. **Reranking** – Pass the remaining candidates through a cross-encoder (bi-encoder for fast retrieval, cross-encoder for precision) to sort by fine-grained relevance.  
-
-> ⚡️ Result: fast recall + precise ordering.
+1. **Query Processing**: Expands query with synonyms (WordNet) & extracts attributes (RAM, brand, CPU, etc.).
+2. **Semantic Retrieval**: Encodes query → searches Pinecone vector DB for top-k similar items.
+3. **Hard Filtering**: Removes candidates not matching explicit attributes (e.g., “16GB RAM”).
+4. **Reranking**: Cross-encoder reorders remaining candidates for final precision.
 
 ---
 
 ## ✨ Key Features
 
-- **Hybrid Search Architecture**: Semantic vector search + rule/regex/keyword filters.  
-- **Retrieve-and-Rerank Pipeline**: Balanced for latency and quality.  
-- **Dynamic Query Expansion**: NLTK + WordNet to capture synonyms and related terms.  
-- **Advanced Query Parsing**: Regex + lightweight heuristics for specs like RAM/CPU/SSD/GPU.  
-- **Extensible**: Swap models, databases, or add business rules (boost brand, penalize OOS items).  
+- **Hybrid Search**: Semantic + keyword precision  
+- **RESTful API**: FastAPI backend with interactive docs  
+- **Web UI**: Streamlit frontend for user-friendly search  
+- **Retrieve & Rerank Pipeline**: Fast + accurate results  
+- **Query Expansion**: WordNet synonyms capture intent  
 
 ---
 
 ## ⚙️ Tech Stack
 
-- **Backend**: Python 3.10+  
-- **Vector DB**: Pinecone  
-- **Embeddings**: Sentence-Transformers (e.g., `all-MiniLM-L6-v2`)  
-- **Reranking**: Cross-encoders (e.g., `cross-encoder/ms-marco-MiniLM-L-6-v2`)  
-- **NLP**: NLTK (WordNet) for query expansion  
-- **Data**: Pandas  
-- **Env**: `python-dotenv`  
+- **Backend**: Python  
+- **API Framework**: FastAPI  
+- **Web UI Framework**: Streamlit  
+- **Vector Database**: Pinecone  
+- **Embeddings & Reranking**: Sentence-Transformers (Hugging Face)  
+- **NLP**: NLTK (WordNet)  
+- **Data Handling**: Pandas  
 
 ---
 
@@ -71,58 +71,70 @@ The engine follows a multi-stage pipeline to process a user's query and retrieve
    ```bash
    git clone <your-repository-url>
    cd semantic-search
-````
+   ```
 
-2. **Create and Activate a Virtual Environment**
-
+2. **Create and Activate Virtual Environment**
    ```bash
    python -m venv .venv
-   source .venv/bin/activate  # macOS/Linux
-   # .venv\Scripts\activate   # Windows PowerShell
+   source .venv/bin/activate   # On Windows: .venv\Scripts\activate
    ```
 
 3. **Install Dependencies**
-
    ```bash
    pip install -r requirements.txt
    ```
+   *(Tip: keep a curated `requirements.txt` or use `pyproject.toml` for reproducibility.)*
 
-4. **Download NLTK Data (first run only)**
-
-   ```bash
-   python -c "import nltk; nltk.download('wordnet'); nltk.download('omw-1.4')"
-   ```
-
-5. **Configure Environment Variables**
-   Create a `.env` file in the project root:
-
+4. **Configure Environment Variables**  
+   Add your Pinecone credentials in `.env`:
    ```env
-   PINECONE_API_KEY=YOUR_API_KEY
-   PINECONE_ENV=YOUR_ENV
-   PINECONE_INDEX=semantic-laptops
-   EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
-   CROSS_ENCODER_MODEL=cross-encoder/ms-marco-MiniLM-L-6-v2
-   TOP_K=50
-   RERANK_K=10
+   PINECONE_API_KEY="YOUR_API_KEY_HERE"
+   PINECONE_ENV="YOUR_ENVIRONMENT_HERE"
    ```
-
-> ℹ️ For local experiments without Pinecone, you can switch to a FAISS fallback (see `config.yaml`).
 
 ---
 
-## ▶️ Usage
+## 🚀 Usage
+
+### Web Interface (Recommended)
+
+1. **Start the FastAPI Backend**
+   ```bash
+   uvicorn app.api:app --reload
+   ```
+   Visit [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) for the interactive API docs.
+
+2. **Launch the Streamlit Frontend**
+   ```bash
+   streamlit run app.streamlit_ui.py
+   ```
+   A browser tab will open with the UI.
+
+---
+
+### Legacy CLI Usage
 
 1. **Build the Vector Index**
-
    ```bash
    python scripts/01_build_index.py
    ```
 
-2. **Run the Interactive Search**
-
+2. **Run the Interactive CLI**
    ```bash
    python scripts/02_search.py
    ```
+
+---
+
+## 🧑‍💻 Example Queries
+
+Try out some searches:
+
+- *"Lightweight gaming laptop with 16GB RAM under $1200"*  
+- *"Dell laptop for programming with i7 processor and SSD"*  
+- *"Business laptop with long battery life and touchscreen"*  
+
+*(Consider adding screenshots of Streamlit UI and example responses here.)*
 
 ---
 
@@ -130,41 +142,58 @@ The engine follows a multi-stage pipeline to process a user's query and retrieve
 
 ```
 semantic-search/
+├── app/
+│   ├── api.py                # FastAPI backend
+│   └── streamlit_ui.py       # Streamlit frontend
 ├── scripts/
-│   ├── 01_build_index.py        # Builds and populates the vector index
-│   └── 02_search.py             # Runs the interactive search CLI
+│   ├── 01_build_index.py     # Build vector index
+│   └── 02_search.py          # Legacy CLI
 ├── src/
 │   ├── pipeline/
-│   │   └── semantic_pipeline.py   # Main orchestrator for the search logic
+│   │   └── semantic_pipeline.py
 │   ├── processing/
-│   │   ├── query_parser.py        # Extracts structured specs from queries
-│   │   └── wordnet_controlled.py  # Expands queries with synonyms
+│   │   ├── query_parser.py
+│   │   └── wordnet_controlled.py
 │   └── retrieval/
-│       ├── embedder.py            # Handles text-to-vector encoding
-│       ├── reranker.py            # Reranks retrieved results for accuracy
-│       └── vector_index.py        # Manages interaction with Pinecone
-├── artifacts/                       # Stores the index manifest and doc store
+│       ├── embedder.py
+│       ├── reranker.py
+│       └── vector_index.py
+├── artifacts/                # Index metadata
 ├── data/
-│   └── laptop_data_cleaned.csv    # The sample dataset
-├── .env                             # Stores API keys
-└── README.md                        # Project documentation
+│   └── laptop_data_cleaned.csv
+├── .env
+└── README.md
 ```
 
 ---
 
 ## 💡 Future Improvements
 
-* **Implement Filter Fallback**: If no exact matches are found after filtering, gracefully fall back to showing the best semantic results.
-* **Centralize Configuration**: Move keyword maps and lists from the parser into a central `config.py` file to improve code structure.
-* **Web Interface**: Build a user-friendly UI (using Streamlit or Flask) to make the search engine more accessible.
-* **Fine-Tune Models**: Fine-tune the embedding and reranker models on a domain-specific dataset to further improve their understanding of technical jargon.
+- **Enhance Web UI**: Search history, pagination, visualizations  
+- **Filter Fallback**: Show semantic results if strict filtering fails  
+- **Config Centralization**: Move keyword maps → `config.py`  
+- **Model Fine-Tuning**: Train on domain-specific dataset  
+
+---
+
+## 📊 Dataset
+
+The included dataset (`laptop_data_cleaned.csv`) is a cleaned sample of laptop specifications.  
+*(If adapted from a public source such as Kaggle, cite the original link here.)*  
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License** – free to use, modify, and distribute.  
+See [LICENSE](LICENSE) for details.  
 
 ---
 
 ## 📬 Connect with Me
 
-Feel free to reach out to me on LinkedIn to discuss this project, potential collaborations, or anything else!
+Let’s connect on LinkedIn to discuss this project or future collaborations!
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Yashwanth-blue?style=for-the-badge\&logo=linkedin)]([https://www.linkedin.com/in/your-linkedin-profile/](https://www.linkedin.com/in/yashwanth-kasarabada-ba4265258/))
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Yashwanth-blue?style=for-the-badge&logo=linkedin)]([https://www.linkedin.com/in/your-linkedin-profile/](https://www.linkedin.com/in/yashwanth-kasarabada-ba4265258/))
 
-
+*(Replace `your-linkedin-profile` with your actual LinkedIn URL.)*
