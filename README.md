@@ -105,7 +105,7 @@ semantic-search/
 ├── data/
 │   └── laptop_data_cleaned.csv  # The dataset
 ├── .env                           # Stores API keys
-└── README.md                      # This file
+└── README.md                      # Project documentation
 
 ---
 
