@@ -165,9 +165,6 @@ semantic-search/
 
 Feel free to reach out to me on LinkedIn to discuss this project, potential collaborations, or anything else!
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Yashwanth-blue?style=for-the-badge\&logo=linkedin)](https://www.linkedin.com/in/your-linkedin-profile/)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Yashwanth-blue?style=for-the-badge\&logo=linkedin)]([https://www.linkedin.com/in/your-linkedin-profile/](https://www.linkedin.com/in/yashwanth-kasarabada-ba4265258/))
 
-*(Remember to replace `https://www.linkedin.com/in/your-linkedin-profile/` with your actual LinkedIn profile link.)*
 
-```
-```
