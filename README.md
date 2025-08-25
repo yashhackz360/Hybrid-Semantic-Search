@@ -135,8 +135,6 @@ Try out some searches:
 - *"Dell laptop for programming with i7 processor and SSD"*  
 - *"Business laptop with long battery life and touchscreen"*  
 
-*(Consider adding screenshots of Streamlit UI and example responses here.)*
-
 ---
 
 ## 📂 Project Structure
