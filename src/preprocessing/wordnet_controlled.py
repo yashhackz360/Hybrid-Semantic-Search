@@ -7,11 +7,21 @@ from nltk import pos_tag, word_tokenize
 # --- NLTK Data Check ---
 # This ensures all required packages are available.
 try:
-    STOPWORDS = set(stopwords.words('english'))
+    nltk.data.find('tokenizers/punkt')
+except LookupError:
+    nltk.download('punkt')
+try:
+    nltk.data.find('corpora/stopwords')
 except LookupError:
     nltk.download('stopwords')
-    STOPWORDS = set(stopwords.words('english'))
-
+try:
+    nltk.data.find('taggers/averaged_perceptron_tagger')
+except LookupError:
+    nltk.download('averaged_perceptron_tagger')
+try:
+    nltk.data.find('corpora/wordnet')
+except LookupError:
+    nltk.download('wordnet')
 # --- Configuration ---
 
 # Words that WordNet often misinterprets in a tech context
