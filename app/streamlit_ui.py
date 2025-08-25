@@ -1,81 +1,69 @@
+# app/streamlit_ui.py
+
 import streamlit as st
-import requests
+import sys
+import os
+
+# This allows the app to find the 'src' module
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from src.pipeline.semantic_pipeline import SemanticPipeline
 
 # --- Page Configuration ---
 st.set_page_config(
-    page_title=" Semantic Product Discovery Engine",
+    page_title="Semantic Product Discovery",
     page_icon="💻",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
+# --- Caching the Pipeline ---
+# This is a critical step for performance. It loads the models only once.
+@st.cache_resource
+def load_pipeline():
+    """Loads and caches the SemanticPipeline instance."""
+    # df=None is used because we are only in search mode
+    return SemanticPipeline(df=None)
+
+# Load the pipeline from the cache
+pipeline = load_pipeline()
+
 # --- Sidebar ---
 with st.sidebar:
     st.header("About")
-    # --- Start of Updated Description ---
     st.markdown(
         """
-        This project delivers a state-of-the-art search solution engineered to bridge the critical gap between conversational human language and structured product data. 
+        This project delivers a state-of-the-art search solution engineered to bridge the critical gap between conversational human language and structured product data.
         
         This **Hybrid Semantic Search Engine** transcends the limitations of traditional keyword search to create an intelligent and intuitive product discovery experience.
         """
     )
-    # --- End of Updated Description ---
     st.divider()
-    st.write("""Project by \\
-                Yashwanth Sai Kasarabada""")
-    st.markdown("[Connect on LinkedIn](https://www.linkedin.com/in/yashwanth-kasarabada-ba4265258/)") # Remember to add your profile link
-
+    st.header("Controls")
+    top_k = st.slider(
+        "Number of results to display:",
+        min_value=3,
+        max_value=10,
+        value=5,
+        step=1
+    )
+    st.divider()
+    st.write("Project by Yashwanth")
+    st.markdown("[Connect on LinkedIn](https://www.linkedin.com/in/yashwanth-k-939883219/)")
 
 # --- Main Page ---
+st.title("💻 Semantic Product Discovery Engine")
 
-# --- Header ---
-st.title(" 🔍 Hybrid Semantic Search: A Product Discovery Engine for E-Commerce ")
-st.markdown(" *Using a Laptops E-commerce Dataset For Testing* ")
-st.markdown(
-    """
-    <style>
-    .stTextInput > div > div > input {
-        font-size: 1.1rem;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
 query = st.text_input(
     "Search for laptops using natural language...",
     placeholder="e.g., a lightweight ultrabook with 16gb ram for travel",
-    label_visibility="collapsed"
 )
-
-# --- Example Queries ---
-st.markdown("##### Try an example:")
-col1, col2, col3 = st.columns([1,1,1])
-with col1:
-    if st.button("Gaming laptop with Nvidia GPU"):
-        query = "Gaming laptop with Nvidia GPU"
-        st.rerun()
-with col2:
-    if st.button("Dell ultrabook with an i7 processor"):
-        query = "Dell ultrabook with an i7 processor"
-        st.rerun()
-with col3:
-    if st.button("A cheap notebook for a student"):
-        query = "A cheap notebook for a student"
-        st.rerun()
-
-st.divider()
 
 # --- Search Execution and Results ---
 if query:
-    API_URL = "http://127.0.0.1:8000/search"
-    payload = {"query": query, "top_k": top_k}
-    
     try:
         with st.spinner("🧠 Performing semantic search..."):
-            response = requests.post(API_URL, json=payload)
-            response.raise_for_status()
-            results = response.json()
+            # Call the pipeline directly instead of making an API request
+            results = pipeline.search(query=query, top_k_rerank=top_k)
         
         if results:
             st.success(f"Found {len(results)} relevant results.")
@@ -90,7 +78,5 @@ if query:
         else:
             st.warning("No relevant results found. Try rephrasing your query.")
 
-    except requests.exceptions.RequestException as e:
-        st.error(f"Connection Error: Could not connect to the API. Please ensure the backend is running. Details: {e}")
     except Exception as e:
-        st.error(f"An unexpected error occurred: {e}")
+        st.error(f"An error occurred during the search: {e}")
