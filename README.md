@@ -180,7 +180,6 @@ semantic-search/
 ## 📊 Dataset
 
 The included dataset (`laptop_data_cleaned.csv`) is a cleaned sample of laptop specifications.  
-*(If adapted from a public source such as Kaggle, cite the original link here.)*  
 
 ---
 
@@ -197,4 +196,3 @@ Let’s connect on LinkedIn to discuss this project or future collaborations!
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Yashwanth-blue?style=for-the-badge&logo=linkedin)]([https://www.linkedin.com/in/your-linkedin-profile/](https://www.linkedin.com/in/yashwanth-kasarabada-ba4265258/))
 
-*(Replace `your-linkedin-profile` with your actual LinkedIn URL.)*
