@@ -1,16 +1,16 @@
-Core libraries for data and NLP
+#Core libraries for data and NLP
 pandas
 numpy
 nltk
 python-dotenv
 
-Vector search and machine learning models
+#Vector search and machine learning models
 pinecone-client
 sentence-transformers
 torch
 transformers
 
-API and Web Interface
+#API and Web Interface
 fastapi
 uvicorn[standard]
 streamlit
